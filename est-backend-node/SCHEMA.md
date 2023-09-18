@@ -26,7 +26,7 @@ Address
 |      Field          |       Type       | Required | Unique  | Indexed |
 |---------------------|------------------|----------|---------|---------|
 | streetAddress       | String           | Yes      | No      | No      |
-| city                | String           | Yes      |No       | No      |
-| postalCode          |String            |Yes       |No       | No      |
-| country             |String            |Yes       |No       | No      |
+| city                | String           | Yes      | No      | No      |
+| postalCode          | String           | Yes      | No      | No      |
+| country             | String           | Yes      | No      | No      |
 |---------------------|------------------|----------|---------|---------|
