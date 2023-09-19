@@ -81,4 +81,5 @@
 .employeeLastName,
 .employeeContacts {
   flex-grow: 2;
+  align-content: flex-start;
 }
