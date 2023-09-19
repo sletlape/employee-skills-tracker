@@ -1,7 +1,10 @@
-import express, {Request, Response} from "express";
+import express, { Request, Response } from "express";
+import cors from 'cors';
 
 const app = express();
-const url = "http://localhost:"
+app.use(cors());
+
+const url = "http://localhost:";
 const port = 3000;
 
 interface Employee{
