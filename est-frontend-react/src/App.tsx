@@ -14,6 +14,7 @@ function App() {
     fetch(`http://localhost:3000/employees`)
       .then(res => res.json())
       .then(data => setEmpoyees(data))
+      .catch((err) => console.log(err));
   }, [])
 
   return (
