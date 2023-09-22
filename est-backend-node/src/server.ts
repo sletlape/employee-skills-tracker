@@ -4,9 +4,6 @@ import cors from 'cors';
 const app = express();
 app.use(cors());
 
-const url = "http://localhost:";
-const port = 3000;
-
 interface Employee{
     firstName: string,
     lastName: string,
@@ -36,10 +33,13 @@ const employees: Employee[] = [
     },
 ];
 
+app.get('/', (req: Request, res: Response) => {
+    res.json({ message: 'Welcome to the Employee Skills API.' });
+});
+
 app.get('/employees', (req: Request, res: Response) => {
     res.json(employees);
 });
 
-app.listen(port, () => {
-    console.log(`Server listening at ${url} on port ${port}/`);
-})
+
+export default app;
