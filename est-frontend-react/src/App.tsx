@@ -1,16 +1,16 @@
-import { useEffect, useState } from 'react';
-import './App.css';
-import { getEmployees } from './services/employeeService';
-import Header from './components/Header';
-import EmployeeList from './components/EmployeeList';
-import { Employee } from './interfaces/Employees';
-import EmployeeForm from './components/EmployeeForm';
+// App.tsx
+import React, { useEffect, useState } from "react";
+import "./App.css";
+import Header from "./components/Header";
+import EmployeeList from "./components/EmployeeList";
+import EmployeeForm from "./components/EmployeeForm";
+import { Employee } from "./interfaces/Employees";
+import { getEmployees } from "./services/employeeService";
 
 function App() {
   const [employees, setEmpoyees] = useState<Employee[]>([]);
-  const [isAddEmployeeModalOpen, setIsAddEmployeeModalOpen] = useState(false);
-  const [selectedEmployee, setSelectedEmployee] = useState<Employee | null>(null);
-
+  const [showModal, setShowModal] = useState(false);
+  const [editingEmployee, setEditingEmployee] = useState<Employee | null>(null);
 
   useEffect(() => {
     getEmployees()
@@ -19,41 +19,35 @@ function App() {
   }, []);
 
   const handleAddEmployeeClick = () => {
-    setIsAddEmployeeModalOpen(true);
-    setSelectedEmployee(null); // Clear selected employee data
+    setShowModal(true);
+    setEditingEmployee(null);
   };
 
-  const handleEditEmployeeClick = (employee: Employee) => {
-    setIsAddEmployeeModalOpen(true);
-    setSelectedEmployee(employee); // Set selected employee data for editing
+  const handleEditEmployeeClick = (employeeData: any) => {
+    setShowModal(true);
+    setEditingEmployee(employeeData);
   };
 
-  const handleSaveEmployee = (employee: Employee) => {
-    // Handle saving employee data (add or edit)
-    // Add your logic here to update the employees list or send data to the server
-    console.log('Saved employee data:', employee);
-
-    // Close the modal
-    setIsAddEmployeeModalOpen(false);
-  };
-
-
-  const handleCloseEmployeeModal = () => {
-    setIsAddEmployeeModalOpen(false);
+  const handleSaveEmployee = (employeeData: any) => {
+    console.log("Employee data to save:", employeeData);
+    setShowModal(false);
   };
 
   return (
     <div className="App">
-      <div className="container">    
-        <Header employeeCount={employees.length} onAddEmployeeClick={handleAddEmployeeClick} />
-        <EmployeeList employees={employees} />
-        <EmployeeForm
-          onClose={handleCloseEmployeeModal}
-          onSave={handleSaveEmployee}
-        />
+      <div className="container">
+        <Header onAddEmployeeClick={handleAddEmployeeClick} employeeCount={employees.length} />
+        <EmployeeList employees={employees} onEditEmployeeClick={handleEditEmployeeClick} />
+        {showModal && (
+          <EmployeeForm
+            onClose={() => setShowModal(false)}
+            onSave={handleSaveEmployee}
+            employeeData={editingEmployee}
+          />
+        )}
       </div>
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
