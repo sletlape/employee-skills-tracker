@@ -2,7 +2,7 @@ import { Employee } from "../interfaces/Employees";
 
 export async function getEmployees(): Promise<Employee[]> {
     try {
-        const response = await fetch(`http://localhost:3000/employees`);
+        const response = await fetch(`http://localhost:3000/api/v1/employees`);
         if (!response.ok) {
             throw new Error('Network error.')
         }
