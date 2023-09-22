@@ -1,0 +1,85 @@
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+.App {
+  display: flex;
+  flex-direction: column;
+  background-color: #1b0d24;
+  height: 100vh;
+}
+
+.container {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  background-color: #c6ceb2;
+  padding: 10px;
+  gap: 5px;
+}
+
+.header {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  background-color: #bbdefb;
+  padding: 15px;
+  gap: 5px;
+}
+
+.header > div {
+  background: #ffecb3;
+  border: 3px solid #ffcc80;
+  border-radius: 5px;
+  padding: 8px;
+}
+
+.title h3,
+.title h6 {
+  margin: 0;
+  padding: 0;
+}
+
+.searchbar {
+  flex-grow: 4;
+}
+
+.addEmployeeBtn {
+  border-radius: 50px;
+}
+
+.filter .addEmployeeBtn {
+  flex-grow: 0;
+}
+
+/* Employee list */
+
+.employeeList {
+  display: flex;
+  flex-direction: column;
+  background-color: #0989f1;
+  padding: 15px;
+  gap: 5px;
+}
+
+.employee {
+  display: flex;
+  background: #9ceb95;
+  border: 3px solid #98ca84;
+  border-radius: 5px;
+  padding: 8px;
+}
+
+.employeeIndex {
+  flex-grow: 1;
+}
+
+.employeeFirstName,
+.employeeLastName,
+.employeeContacts {
+  flex-grow: 2;
+  align-content: flex-start;
+}
