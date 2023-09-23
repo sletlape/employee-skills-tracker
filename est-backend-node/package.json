@@ -30,9 +30,10 @@
     "typescript": "^5.2.2"
   },
   "scripts": {
-    "start": "node dist/server.js",
+    "start": "node /src/server.ts",
     "dev": "nodemon src/server.ts",
     "build": "tsc",
-    "test": "npm-run-all -p start jest"
+    "test": "npm-run-all -p start jest",
+    "jest": "jest"
   }
 }
