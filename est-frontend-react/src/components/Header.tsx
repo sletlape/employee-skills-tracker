@@ -9,7 +9,7 @@ interface HeaderProps {
 }
 
 const Header: React.FC<HeaderProps> = ({ employeeCount, onAddEmployeeClick }) => {
-    const [selectedFilter, setSelectedFilter] = useState<string>('All')
+    // const [selectedFilter, setSelectedFilter] = useState<string>('All');
     return (
         <div className="header">
             <div className="title">

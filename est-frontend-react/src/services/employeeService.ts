@@ -2,55 +2,53 @@ import { Employee } from "../interfaces/Employees";
 
 // Mock data
 const employeesData: Employee[] = [
-    {
-        id: 1,
-        firstName: "John",
-        lastName: "Doe",
-        contactNumber: "123-456-7890",
-        emailAddress: "john.doe@example.com",
-        dob: "1990-01-01",
-        streetAddress: "123 Main St",
-        city: "Cityville",
-        postalCode: "12345",
-        country: "USA",
-        skills: [
-            {
-                skill: "JavaScript",
-                yearsExperience: 5,
-                seniority: "Intermediate",
-            },
-            {
-                skill: "React",
-                yearsExperience: 3,
-                seniority: "Junior",
-            },
-        ],
-    },
-    {
-        id: 2,
-        firstName: "Jane",
-        lastName: "Smith",
-        contactNumber: "987-654-3210",
-        emailAddress: "jane.smith@example.com",
-        dob: "1995-02-15",
-        streetAddress: "456 Oak St",
-        city: "Townsville",
-        postalCode: "54321",
-        country: "Canada",
-        skills: [
-            {
-                skill: "Python",
-                yearsExperience: 4,
-                seniority: "Intermediate",
-            },
-            {
-                skill: "Django",
-                yearsExperience: 2,
-                seniority: "Junior",
-            },
-        ],
-    },
-];
+        {
+            firstName: "John",
+            lastName: "Doe",
+            contactNumber: "123-456-7890",
+            emailAddress: "john.doe@example.com",
+            dob: "1990-01-01",
+            streetAddress: "123 Main St",
+            city: "Cityville",
+            postalCode: "12345",
+            country: "USA",
+            skills: [
+                {
+                    skill: "JavaScript",
+                    yearsExperience: "5",
+                    seniority: "Intermediate",
+                },
+                {
+                    skill: "React",
+                    yearsExperience: "3",
+                    seniority: "Junior",
+                },
+            ],
+        },
+        {
+            firstName: "Jane",
+            lastName: "Smith",
+            contactNumber: "987-654-3210",
+            emailAddress: "jane.smith@example.com",
+            dob: "1995-02-15",
+            streetAddress: "456 Oak St",
+            city: "Townsville",
+            postalCode: "54321",
+            country: "Canada",
+            skills: [
+                {
+                    skill: "Python",
+                    yearsExperience: "4",
+                    seniority: "Intermediate",
+                },
+                {
+                    skill: "Django",
+                    yearsExperience: "2",
+                    seniority: "Junior",
+                },
+            ],
+        },
+    ];
 
 export async function getEmployees(): Promise<Employee[]> {
     // Simulate a delay (e.g., an API call)
@@ -71,3 +69,20 @@ export async function saveEmployee(employee: Employee): Promise<Employee> {
 
     return newEmployee;
 }
+
+
+///Real service:
+// import { Employee } from "../interfaces/Employees";
+
+// export async function getEmployees(): Promise<Employee[]> {
+//     try {
+//         const response = await fetch(`http://localhost:3000/api/v1/employees`);
+//         if (!response.ok) {
+//             throw new Error('Network error.')
+//         }
+//         const data = await response.json();
+//         return data;
+//     } catch (error) {
+//         throw new Error(`Error retrieving employees: ${error.message}`)
+//     }
+// }

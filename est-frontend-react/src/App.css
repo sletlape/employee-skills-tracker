@@ -6,10 +6,13 @@
   text-align: left;
 }
 
+body {
+  background-color: #1b0d24;
+}
+
 .App {
   display: flex;
   flex-direction: column;
-  background-color: #1b0d24;
   height: 100vh;
 }
 
@@ -108,8 +111,26 @@ form {
   text-align: left;
 }
 
+.employee-form {
+  position: fixed;
+  top: 10%;
+  /* Adjust this value to control the vertical position */
+  left: 50%;
+  /* Center horizontally */
+  transform: translateX(-50%);
+  border-radius: 10px;
+  z-index: 9999;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+}
+
+.form-title{
+  padding: 0;
+  margin: 0;
+}
+
+
 .section-title {
-  margin-bottom: 5px;
+  margin: 5px;
   color: #6a257e;
 }
 
@@ -120,17 +141,20 @@ label {
 }
 .skills-row {
   display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 10px;
 }
 
 .skills{
-  flex-grow: 2;
+  flex: 30%
 }
 .years{
-  flex-grow: 1
+  flex: 30%
 }
 .seniority{
-  flex-grow: 3
+  flex: 30%
 }
 .bin{
-  flex-grow: 0;
+  flex: 5%
 }

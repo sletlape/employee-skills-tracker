@@ -1,5 +1,4 @@
-// App.tsx
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import "./App.css";
 import Header from "./components/Header";
 import EmployeeList from "./components/EmployeeList";
@@ -30,6 +29,7 @@ function App() {
 
   const handleSaveEmployee = (employeeData: any) => {
     console.log("Employee data to save:", employeeData);
+    setEmpoyees([...employees, employeeData])
     setShowModal(false);
   };
 
@@ -38,14 +38,14 @@ function App() {
       <div className="container">
         <Header onAddEmployeeClick={handleAddEmployeeClick} employeeCount={employees.length} />
         <EmployeeList employees={employees} onEditEmployeeClick={handleEditEmployeeClick} />
-        {showModal && (
+      </div>
+              {showModal && (
           <EmployeeForm
             onClose={() => setShowModal(false)}
             onSave={handleSaveEmployee}
             employeeData={editingEmployee}
           />
         )}
-      </div>
     </div>
   );
 }

@@ -1,20 +1,17 @@
 import React, { useEffect, useState } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrashCan } from "@fortawesome/free-solid-svg-icons"
-import { Employee } from "../interfaces/Employees";
+import { Employee, Skill } from '../interfaces/Employees';
 
 interface EmployeeFormProps {
     onClose: () => void;
-    onSave: (employee: Employee) => void;
-    employeeData?: Employee | null;
+    onSave: (employeeData: Employee) => void;
+    employeeData?: Employee;
 }
 
-const EmployeeForm: React.FC<EmployeeFormProps> = ({
-    onClose,
-    onSave,
-    employeeData
-}) => {
-    const [formData, setFormData] = useState({
+const EmployeeForm: React.FC<EmployeeFormProps> = ({ onClose, onSave, employeeData }) => {
+    const initialSkill: Skill = { skill: "", yearsExperience: "", seniority: "" };
+    // const formRef = useRef<HTMLDivElement>(null);
+
+    const [formData, setFormData] = useState<Employee>({
         firstName: "",
         lastName: "",
         contactNumber: "",
@@ -24,12 +21,12 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({
         city: "",
         postalCode: "",
         country: "",
-        skills: [],
+        skills: [initialSkill],
     });
 
     useEffect(() => {
         if (employeeData) {
-            setFormData({ ...employeeData });
+            setFormData(employeeData);
         } else {
             setFormData({
                 firstName: "",
@@ -41,7 +38,7 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({
                 city: "",
                 postalCode: "",
                 country: "",
-                skills: [],
+                skills: [initialSkill],
             });
         }
     }, [employeeData]);
@@ -59,7 +56,7 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({
             ...formData,
             skills: [
                 ...formData.skills,
-                { skill: "", yearsExperience: "", seniority: "" },
+                initialSkill,
             ],
         });
     };
@@ -73,143 +70,174 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({
         });
     };
 
+    const handleRemoveSkill = (index: number) => {
+        const newSkills = [...formData.skills];
+        newSkills.splice(index, 1);
+        setFormData({
+            ...formData,
+            skills: newSkills,
+        });
+    };
+
     const handleSave = () => {
+        console.log(formData)
         onSave(formData);
     };
 
     return (
         <div className="employee-form">
-            <h3>{employeeData ? "Edit Employee" : "Add Employee"}</h3>
-            <form onSubmit={handleSave}>
-                <div className="basic-info">
-                    <h5 className="section-title">Basic Info</h5>
-                    <div className="usr-Names">
-                        <label>
-                            First Name:
-                            <input
-                                type="text"
-                                name="firstName"
-                                onChange={handleInputChange}
-                            />
-                        </label>
-                        <label>
-                            Last Name:
-                            <input
-                                type="text"
-                                name="lastName"
-                                onChange={handleInputChange}
-                            />
-                        </label>
-                    </div>
-                    <label>
-                        Contact Number:
+        <form onSubmit={handleSave}>
+                {/* Basic Info */}
+            <h4 className="form-title">{employeeData ? "Edit Employee" : "Add Employee"}</h4>
+            <h5 className="section-title">Basic Info</h5>
+            <div className="usr-Names">
+                <label>
+                    First Name:
+                    <input
+                        type="text"
+                        name="firstName"
+                        value={formData.firstName}
+                        onChange={handleInputChange}
+                        required
+                    />
+                </label>
+                <label>
+                    Last Name:
+                    <input
+                        type="text"
+                        name="lastName"
+                        value={formData.lastName}
+                        onChange={handleInputChange}
+                        required
+                    />
+                </label>
+            </div>
+            <label>
+                Contact Number:
+                <input
+                    type="text"
+                    name="contactNumber"
+                    value={formData.contactNumber}
+                    onChange={handleInputChange}
+                    required
+                />
+            </label>
+            <label>
+                Email Address:
+                <input
+                    type="email"
+                    name="emailAddress"
+                    value={formData.emailAddress}
+                    onChange={handleInputChange}
+                    required
+                />
+            </label>
+            <label>
+                Date of Birth:
+                <input
+                    type="date"
+                    name="dob"
+                    value={formData.dob}
+                    onChange={handleInputChange}
+                    required
+                />
+            </label>
+
+            {/* Address Info */}
+            <h5 className="section-title">Address Info</h5>
+            <label>
+                Street Address:
+                <input
+                    type="text"
+                    name="streetAddress"
+                    value={formData.streetAddress}
+                    onChange={handleInputChange}
+                    required
+                />
+            </label>
+            <label>
+                City:
+                <input
+                    type="text"
+                    name="city"
+                    value={formData.city}
+                    onChange={handleInputChange}
+                    required
+                />
+            </label>
+            <label>
+                Postal Code:
+                <input
+                    type="text"
+                    name="postalCode"
+                    value={formData.postalCode}
+                    onChange={handleInputChange}
+                    required
+                />
+            </label>
+            <label>
+                Country:
+                <input
+                    type="text"
+                    name="country"
+                    value={formData.country}
+                    onChange={handleInputChange}
+                    required
+                />
+            </label>
+
+            {/* Skills */}
+            <h5 className="section-title">Skills</h5>
+            {formData.skills.map((skill, index) => (
+                <div className="skills-row" key={index}>
+                    <label className="skills">
+                        Skill:
                         <input
                             type="text"
-                            name="contactNumber"
-                            onChange={handleInputChange}
+                            name="skill"
+                            value={skill.skill}
+                            onChange={(event) => handleSkillChange(index, event)}
+                            required
                         />
                     </label>
-                    <label>
-                        Email Address:
+                    <label className="years">
+                        Yrs Exp:
                         <input
-                            type="email"
-                            name="emailAddress"
-                            onChange={handleInputChange}
+                            type="number"
+                            name="yearsExperience"
+                            value={skill.yearsExperience}
+                            onChange={(event) => handleSkillChange(index, event)}
+                            required
                         />
                     </label>
-                    <label>
-                        Date of Birth:
-                        <input
-                            type="date"
-                            name="dob"
-                            onChange={handleInputChange}
-                        />
+                    <label className="seniority">
+                        Seniority Rating:
+                        <select
+                            name="seniority"
+                            value={skill.seniority}
+                            onChange={(event) => handleSkillChange(index, event)}
+                            required
+                        >
+                            <option value="">Select...</option>
+                            <option value="junior">Beginner</option>
+                            <option value="mid">Intermediate</option>
+                            <option value="senior">Expert</option>
+                        </select>
                     </label>
+                    {index > 0 && (
+                        <label className="bin" onClick={() => handleRemoveSkill(index)}>
+                            Remove
+                        </label>
+                    )}
                 </div>
+            ))}
+            <button type="button" onClick={handleAddSkill}>
+                Add New Skill
+            </button>
 
-                <h5 className="section-title">Address Info</h5>
-                <label>
-                    Street Address:
-                    <input
-                        type="text"
-                        name="streetAddress"
-                        onChange={handleInputChange}
-                    />
-                </label>
-                <label>
-                    City:
-                    <input
-                        type="text"
-                        name="city"
-                        onChange={handleInputChange}
-                    />
-                </label>
-                <label>
-                    Postal Code:
-                    <input
-                        type="text"
-                        name="postalCode"
-                        onChange={handleInputChange}
-                    />
-                </label>
-                <label>
-                    Country:
-                    <input
-                        type="text"
-                        name="country"
-                        onChange={handleInputChange}
-                    />
-                </label>
-
-                <h5 className="section-title">Skills</h5>
-                {skills.map((skill, index) => (
-                    <div className="skills-row" key={index}>
-                        <label className="skills" >
-                            Skill:
-                            <input
-                                type="text"
-                                name="skill"
-                                value={skill.skill}
-                                onChange={(event) => handleSkillChange(index, event)}
-                            />
-                        </label>
-
-                        <label className="years">
-                            Yrs Exp:
-                            <input
-                                type="number"
-                                name="yearsExperience"
-                                value={skill.yearsExperience}
-                                onChange={(event) => handleSkillChange(index, event)}
-                            />
-                        </label>
-
-                        <label className="seniority">
-                            Seniority Rating:
-                            <select
-                                name="seniority"
-                                value={skill.seniority}
-                                onChange={(event) => handleSkillChange(index, event)}
-                            >
-                                <option value="">Select...</option>
-                                <option value="junior">Beginner</option>
-                                <option value="mid">Intermediate</option>
-                                <option value="senior">Expert</option>
-                            </select>
-                        </label>
-                        <label className="bin">
-                            <FontAwesomeIcon icon={faTrashCan} />
-                        </label>
-                        {/* Add functionality to delete skill */}
-                    </div>
-                ))}
-                <button type="button" onClick={handleAddSkill}>
-                    Add New Skill
-                </button>
-
-                {/* Add functionality to save employee */}
-                <button type="submit">Save Employee</button>
-            </form>
+            {/* Save Button */}
+            <button type="submit">Save Employee</button>
+        </form>
         </div>
     );
 };
