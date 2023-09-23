@@ -29,3 +29,19 @@ export const createEmployee = async (req: Request, res: Response) => {
         res.status(500).json({ message: "Internal server error." });
     }
 };
+
+export const deleteEmployee = async (req: Request, res: Response) => {
+    try {
+        const { id } = req.params;
+
+        const employee = await EmployeeModel.findOne({ id });
+        if (!employee) {
+            return res.status(404).json({ message: "Employee not found" });
+        }
+        await EmployeeModel.deleteOne({ id });
+        res.status(204).end();
+    } catch (error) {
+        console.error("Error occurd while trying to deleet employee:", error);
+        res.status(500).json({ message: "Internal server error" });
+    }
+}
