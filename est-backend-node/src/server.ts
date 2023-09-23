@@ -2,9 +2,9 @@ import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
 import employeeRoutes from "./routes/EmployeeRoutes";
-import dotenv from "dotenv"; // Import dotenv
+import dotenv from "dotenv";
 
-dotenv.config(); // Load environment variables from .env
+dotenv.config();
 
 const port = process.env.PORT || 3000;
 const mongoUri = process.env.MONGODB_URI || "mongodb://localhost:27017/employee-skills-db";
@@ -19,7 +19,7 @@ mongoose
         console.error("MongoDB connection error:", error);
     });
 
-app.use("/api/employees", employeeRoutes);
+app.use("/api/v1/employees", employeeRoutes);
 
 app.listen(port, () => {
     console.log(`Server listening on port ${port}`);
