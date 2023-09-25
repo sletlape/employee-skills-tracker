@@ -7,7 +7,7 @@
 }
 
 body {
-  background-color: #1b0d24;
+  background-color: #0d0115;
 }
 
 .App {
@@ -49,6 +49,7 @@ body {
     display: flex;
     flex-grow: 5;
     padding: 8px;
+    gap: 5px;
   }
 
 .searchbar {
@@ -78,25 +79,36 @@ body {
 
 .employee {
   display: flex;
-  background: #463d4b;
+  background: #615a65;
   border-radius: 5px;
   padding: 8px;
 }
-
+.employeeFirstName,
+.employeeLastName,
+.employeeContacts,
 .employeeIndex {
   flex-grow: 1;
   padding: 10px;
-  border: 1px;
-  border-radius: 20px;
-  border-color: rgb(77, 5, 77);
-  color: rgb(77, 5, 77);
 }
 
-.employeeFirstName,
-.employeeLastName,
-.employeeContacts {
-  flex-grow: 2;
-  align-content: flex-start;
+
+.employeeIndex {
+  border-radius: 20px;
+  border-color: rgb(77, 5, 77);
+  color: rgb(134, 23, 134);
+}
+
+/* No employees */
+.no-employees {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+}
+
+.no-employees >h5 {
+  margin: 0;
 }
 
 /* Form styles */
@@ -105,10 +117,11 @@ form {
   flex-direction: column;
   width: 300px;
   margin: 0 auto;
-  background-color: #3a3b3c;
+  background-color: #282038;
   padding: 20px;
   border-radius: 10px;
   text-align: left;
+  font-size: small;
 }
 
 .employee-form {
@@ -120,7 +133,6 @@ form {
   transform: translateX(-50%);
   border-radius: 10px;
   z-index: 9999;
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
 }
 
 .form-title{
@@ -130,8 +142,8 @@ form {
 
 
 .section-title {
-  margin: 5px;
-  color: #6a257e;
+  margin-bottom: 5px;
+  color: #9541ac;
 }
 
 label {
@@ -139,22 +151,48 @@ label {
   flex-direction: column;
   margin-bottom: 10px;
 }
+
+.usr-Names{
+  display: flex;
+}
+
+.first-name{
+  display: flex;
+  flex-shrink: 3;
+}
+
+.last-name{
+  display: flex;
+}
+
 .skills-row {
   display: flex;
-  flex-wrap: nowrap;
-  align-items: center;
-  gap: 10px;
+  gap: 2px;
 }
 
 .skills{
-  flex: 30%
+  display: flex;
+  flex-grow: 2;
 }
 .years{
-  flex: 30%
+  display: flex;
+  flex-grow: 1;
 }
 .seniority{
-  flex: 30%
+  display: flex;
+  flex-grow: 3
 }
 .bin{
-  flex: 5%
+  display: flex;
+  flex-grow: 1
+}
+
+.form-buttons{
+  display: flex;
+  justify-content: space-between;
+  margin-top: 5em;
+}
+
+.saveBtn{
+  align-content: flex-end;
 }

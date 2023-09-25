@@ -1,88 +1,59 @@
 import { Employee } from "../interfaces/Employees";
 
-// Mock data
-const employeesData: Employee[] = [
-        {
-            firstName: "John",
-            lastName: "Doe",
-            contactNumber: "123-456-7890",
-            emailAddress: "john.doe@example.com",
-            dob: "1990-01-01",
-            streetAddress: "123 Main St",
-            city: "Cityville",
-            postalCode: "12345",
-            country: "USA",
-            skills: [
-                {
-                    skill: "JavaScript",
-                    yearsExperience: "5",
-                    seniority: "Intermediate",
-                },
-                {
-                    skill: "React",
-                    yearsExperience: "3",
-                    seniority: "Junior",
-                },
-            ],
-        },
-        {
-            firstName: "Jane",
-            lastName: "Smith",
-            contactNumber: "987-654-3210",
-            emailAddress: "jane.smith@example.com",
-            dob: "1995-02-15",
-            streetAddress: "456 Oak St",
-            city: "Townsville",
-            postalCode: "54321",
-            country: "Canada",
-            skills: [
-                {
-                    skill: "Python",
-                    yearsExperience: "4",
-                    seniority: "Intermediate",
-                },
-                {
-                    skill: "Django",
-                    yearsExperience: "2",
-                    seniority: "Junior",
-                },
-            ],
-        },
-    ];
+// const baseURL: string = import.meta.env.API_BASE_URL;
+// const apiVersion: string = import.meta.env.API_VER;
+// const resourcePath = "employees";
+// const apiURL: string = `${baseURL}/${apiVersion}/${resourcePath}`;
+
+const apiURL: string = `http://localhost:3000/api/v1/employees`;
 
 export async function getEmployees(): Promise<Employee[]> {
-    // Simulate a delay (e.g., an API call)
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    return employeesData;
+    try {
+        const response = await fetch(apiURL);
+        if (!response.ok) {
+            throw new Error("Network error.")
+        }
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        throw new Error(`Error retrieving employees: ${(error as Error).message}`);
+    }
 }
 
-export async function saveEmployee(employee: Employee): Promise<Employee> {
-    // Simulate saving the employee (e.g., an API call)
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+export async function saveEmployee(employeeData: Employee): Promise<Employee[]> {
+    console.log("Sending POST request")
+    try {
+        const response = await fetch(apiURL, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(employeeData),
+        });
+        if (!response.ok)
+            throw new Error("Network error.");
 
-    // Generate a unique ID (replace this with actual ID generation logic)
-    const id = employeesData.length + 1;
-    const newEmployee = { ...employee, id };
-
-    // Update the mock data
-    employeesData.push(newEmployee);
-
-    return newEmployee;
+        const savedEmpoyee = await response.json();
+        console.log(savedEmpoyee)
+        return savedEmpoyee;
+        
+    } catch (error) {
+        throw new Error(`Error retrieving employees: ${(error as Error).message}`);
+    }
 }
 
-
-///Real service:
-// import { Employee } from "../interfaces/Employees";
-
-// export async function getEmployees(): Promise<Employee[]> {
-//     try {
-//         const response = await fetch(`http://localhost:3000/api/v1/employees`);
-//         if (!response.ok) {
-//             throw new Error('Network error.')
-//         }
-//         const data = await response.json();
-//         return data;
-//     } catch (error) {
-//         throw new Error(`Error retrieving employees: ${error.message}`)
-//     }
-// }
+export async function deleteEmployee(employeeId: string): Promise<Response> {
+    let response;
+    try {
+        console.log("Deleting employee with id:", employeeId)
+        response = await fetch(`${apiURL}/${employeeId}`, {
+            method: "DELETE"
+        });
+        if (!response.ok) {
+            throw new Error("Network error.")
+        }
+    } catch (error) {
+        throw new Error(`Error deleting employee: ${(error as Error).message}`);
+    }
+    return response;
+}
