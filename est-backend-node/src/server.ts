@@ -1,45 +1,33 @@
-import express, { Request, Response } from "express";
-import cors from 'cors';
+import express from "express";
+import cors from "cors";
+import mongoose from "mongoose";
+import employeeRoutes from "./routes/EmployeeRoutes";
+import dotenv from "dotenv";
+
+dotenv.config();
+
+const port = process.env.PORT || 3000;
+const mongoUri = process.env.MONGODB_URI || "mongodb://localhost:27017/employee-skills-db";
 
 const app = express();
 app.use(cors());
 
-interface Employee{
-    firstName: string,
-    lastName: string,
-    contactNumber: string
-};
+// Middleware
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-const employees: Employee[] = [
-    {
-        firstName: "John",
-        lastName: "Doe",
-        contactNumber: "+271234567"
-    },
-    {
-        firstName: "Peter",
-        lastName: "Wheat",
-        contactNumber: "+271234567"
-    },
-    {
-        firstName: "Debbie",
-        lastName: "Brown",
-        contactNumber: "+271234567"
-    },
-    {
-        firstName: "Jane",
-        lastName: "Smith",
-        contactNumber: "+271234567"
-    },
-];
+// Connect to MongoDB
+mongoose
+    .connect(mongoUri, { useNewUrlParser: true, useUnifiedTopology: true })
+    .then(() => console.log("Connected to MongoDB"))
+    .catch((error) => {
+        console.error("MongoDB connection error:", error);
+    });
 
-app.get('/', (req: Request, res: Response) => {
-    res.json({ message: 'Welcome to the Employee Skills API.' });
+app.use("/api/v1/", employeeRoutes);
+
+app.listen(port, () => {
+    console.log(`Server listening on port ${port}`);
 });
-
-app.get('/employees', (req: Request, res: Response) => {
-    res.json(employees);
-});
-
 
 export default app;
