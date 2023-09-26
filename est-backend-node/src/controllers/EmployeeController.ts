@@ -3,17 +3,39 @@ import { validationResult } from "express-validator";
 import EmployeeModel, { EmployeeDocument } from "../models/Employee";
 import { generateEmployeeID } from "../utils/generateID";
 
-export const getAllEmployees = async (req: Request, res: Response) => {
+export const getEmployees = async (req: Request, res: Response) => {
     try {
-        const employees = await EmployeeModel.find();
+        console.log("Search or filter:", req.query)
+        const { search, skill, seniority, city } = req.query;
+        const queryBy: any = {}
+        if (search) {
+            queryBy.$or = [
+                { firstName: { $regex: new RegExp(search.toString(), "i") } },
+                { lastName: { $regex: new RegExp(search.toString(), "i") } },
+                { "skills.skill": { $regex: new RegExp(search.toString(), "i") } },
+            ];
+        }
+
+        if (skill) {
+            queryBy["skills.skill"] = { $regex: new RegExp(skill.toString(), "i") };
+        }
+        if (seniority) {
+            queryBy["skills.seniority"] = { $regex: new RegExp(seniority.toString(), "i") };
+        }
+        if (city) {
+            queryBy["city"] = { $regex: new RegExp(city.toString(), "i") };
+        }
+
+        const employees = await EmployeeModel.find(queryBy);
+        console.log("Responding data:",employees)
         res.status(200).json(employees);
     } catch (error) {
         console.error("Error getting employees:", error);
-        res.status(500).json({ messge: "Internal server error." });
+        res.status(500).json({ message: "Internal server error." });
     }
 };
 
-export const createEmployee = async (req: Request, res: Response) => { 
+export const createEmployee = async (req: Request, res: Response) => {
     try {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
@@ -38,7 +60,7 @@ export const deleteEmployee = async (req: Request, res: Response) => {
         const { id } = req.params;
 
         const employee = await EmployeeModel.findOne({ _id: id });
-        console.log("!!!",employee)
+        console.log("!!!", employee)
         if (!employee) {
             return res.status(404).json({ message: "Employee not found" });
         }
