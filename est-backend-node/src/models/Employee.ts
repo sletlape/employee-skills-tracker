@@ -7,7 +7,7 @@ export interface Skill {
 }
 
 export interface EmployeeDocument extends Document {
-    id: string;
+    _id: string;
     firstName: string;
     lastName: string;
     contactNumber: string;
@@ -21,7 +21,7 @@ export interface EmployeeDocument extends Document {
 }
 
 const EmployeeSchema = new Schema<EmployeeDocument>({
-    id: { type: String, required: true },
+    _id: { type: String, required: true },
     firstName: { type: String, required: true },
     lastName: { type: String, required: true },
     contactNumber: { type: String, required: true },

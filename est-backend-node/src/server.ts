@@ -8,8 +8,13 @@ dotenv.config();
 
 const port = process.env.PORT || 3000;
 const mongoUri = process.env.MONGODB_URI || "mongodb://localhost:27017/employee-skills-db";
+
 const app = express();
 app.use(cors());
+
+// Middleware
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 // Connect to MongoDB
 mongoose
@@ -19,7 +24,7 @@ mongoose
         console.error("MongoDB connection error:", error);
     });
 
-app.use("/api/v1/employees", employeeRoutes);
+app.use("/api/v1/", employeeRoutes);
 
 app.listen(port, () => {
     console.log(`Server listening on port ${port}`);
