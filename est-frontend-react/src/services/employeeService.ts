@@ -5,11 +5,14 @@ import { Employee } from "../interfaces/Employees";
 // const resourcePath = "employees";
 // const apiURL: string = `${baseURL}/${apiVersion}/${resourcePath}`;
 
-const apiURL: string = `http://localhost:3000/api/v1/employees`;
+let apiURL: string = `http://localhost:3000/api/v1/employees`;
 
-export async function getEmployees(): Promise<Employee[]> {
+export async function getEmployees(query? : string): Promise<Employee[]> {
     try {
-        const response = await fetch(apiURL);
+        if (query)
+            apiURL = apiURL + '/?' + query;
+        console.log('I want:', apiURL)
+        const response = await fetch(`${apiURL}`);
         if (!response.ok) {
             throw new Error("Network error.")
         }

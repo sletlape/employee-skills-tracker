@@ -1,14 +1,17 @@
 import React from 'react'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faAngleDown, faCirclePlus } from "@fortawesome/free-solid-svg-icons"
+import { faCirclePlus } from "@fortawesome/free-solid-svg-icons"
 import SearchBar from './SearchBar';
+import FilterDropdown from './FilterDropdown';
 
 interface HeaderProps {
     employeeCount: number;
     onAddEmployeeClick: () => void;
+    onSearch: (searchText: string) => void;
+    onFilterChange: (filters: { skill: string; seniority: string; city: string }) => void;
 }
 
-const Header: React.FC<HeaderProps> = ({ employeeCount, onAddEmployeeClick }) => {
+const Header: React.FC<HeaderProps> = ({ employeeCount, onAddEmployeeClick, onSearch, onFilterChange }) => {
     return (
         <div className="header">
             <div className="title">
@@ -17,15 +20,10 @@ const Header: React.FC<HeaderProps> = ({ employeeCount, onAddEmployeeClick }) =>
             </div>
             <div className="search-filter">
             {
-                employeeCount > 0 &&
+                // employeeCount > 0 &&
                     <>
-                        <SearchBar onSearch={function (searchText: string): void {
-                            console.log(searchText);
-                        } }  />
-                        <div className="filter">
-                                    <span>Filter by </span> { }
-                                    <FontAwesomeIcon icon={faAngleDown} style={{ color: "#7b549c", }} />
-                        </div>
+                        <SearchBar onSearch={onSearch} />
+                        <FilterDropdown onFilterChange={onFilterChange} />
                     </> 
                 }
             </div>

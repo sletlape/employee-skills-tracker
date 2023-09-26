@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import { Employee, Skill } from '../interfaces/Employees';
-import { saveEmployee, updateEmployee } from "../services/employeeService";
+// import { saveEmployee, updateEmployee } from "../services/employeeService";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCirclePlus } from "@fortawesome/free-solid-svg-icons";
 

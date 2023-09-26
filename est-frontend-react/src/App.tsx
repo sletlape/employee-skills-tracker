@@ -12,6 +12,9 @@ function App() {
   const [showModal, setShowModal] = useState(false);
   const [editingEmployee, setEditingEmployee] = useState<Employee | undefined>(undefined);
   const [shouldUpdateEmployees, setShouldUpdateEmployees] = useState(false);
+  const [searchText, setSearchText] = useState("");
+  const [filters, setFilters] = useState({ skill: "", seniority: "", city: "" });
+
 
   useEffect(() => {
     getEmployees()
@@ -25,6 +28,45 @@ function App() {
       })
       .catch((err) => console.log(err));
   }, [shouldUpdateEmployees]);
+
+  useEffect(() => {
+    const filteredEmployees = async () => {
+      try {
+        // Create an object to hold the query parameters
+        const queryParams: { [key: string]: string } = {};
+
+        if (searchText.trim() !== "") {
+          queryParams.search = searchText;
+        }
+
+        if (filters.skill) {
+          queryParams.skill = filters.skill;
+        }
+        if (filters.seniority) {
+          queryParams.seniority = filters.seniority;
+        }
+        if (filters.city) {
+          queryParams.city = filters.city;
+        }
+
+        // Build the query string from the queryParams object
+        const queryString = Object.keys(queryParams)
+          .map((key) => `${key}=${encodeURIComponent(queryParams[key])}`)
+          .join("&");
+
+        // Make the API request with the query string
+        const filtered = await getEmployees(queryString);
+        
+
+        setEmployees(filtered);
+      } catch (error) {
+        console.error("Error filtering employees:", error);
+      }
+    };
+
+    filteredEmployees();
+  }, [searchText, filters]);
+
 
   const handleAddEmployeeClick = () => {
     setShowModal(true);
@@ -74,7 +116,18 @@ function App() {
   return (
     <div className="App">
       <div className="container">
-        <Header onAddEmployeeClick={handleAddEmployeeClick} employeeCount={employees.length} />
+        <Header
+          onAddEmployeeClick={handleAddEmployeeClick}
+          employeeCount={employees.length}
+          onSearch={(text) => {
+            console.log(text)
+            setSearchText(text)
+          }}
+          onFilterChange={(newFilters) => {
+            console.log(newFilters);
+            setFilters(newFilters)
+          }}
+        />
         {employees.length > 0 ? (
           <EmployeeList employees={employees} onEditEmployeeClick={handleEditEmployeeClick} />
         ) : (
