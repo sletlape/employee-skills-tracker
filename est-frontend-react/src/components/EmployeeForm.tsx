@@ -1,16 +1,17 @@
 import React, { useEffect, useState, useRef } from "react";
 import { Employee, Skill } from '../interfaces/Employees';
-import { saveEmployee } from "../services/employeeService";
+import { saveEmployee, updateEmployee } from "../services/employeeService";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCirclePlus } from "@fortawesome/free-solid-svg-icons";
 
 interface EmployeeFormProps {
     onClose: () => void;
     onSave: (employeeData: Employee) => void;
     onDelete: (employeeID: string) => void;
-    updateEmployee: (employeeID: string) => void;
     employeeData?: Employee;
 }
 
-const EmployeeForm: React.FC<EmployeeFormProps> = ({ onClose, onSave, onDelete, updateEmployee,employeeData }) => {
+const EmployeeForm: React.FC<EmployeeFormProps> = ({ onClose, onSave, onDelete, employeeData }) => {
     const initialSkill: Skill = { skill: "", yearsExperience: "", seniority: "" };
     const formRef = useRef<HTMLDivElement>(null);
 
@@ -67,8 +68,6 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ onClose, onSave, onDelete, 
     const handleSkillChange = (index: number, event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const newSkills = [...formData.skills];
         newSkills[index][event.target.name as keyof Skill] = event.target.value;
-        console.log("index:", index);
-        console.log("new skills:",newSkills)
         setFormData(prevState => ({
             ...prevState,
             skills: newSkills,
@@ -76,22 +75,15 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ onClose, onSave, onDelete, 
     };
 
     const handleRemoveSkill = (index: number) => {
-        const newSkills = [...formData.skills];
-        newSkills.splice(index, 1);
         setFormData(prevState => ({
             ...prevState,
-            skills: newSkills,
+            skills: formData.skills.filter((_, i) => i !== index),
         }));
     };
 
     const handleSave = (event: React.FormEvent) => {
         event.preventDefault();
-        console.log("From form:", formData)
         onSave(formData);
-        if (employeeData && employeeData.id)
-            updateEmployee(employeeData.id);
-        else
-            saveEmployee(formData);
     };
 
     const handleClickOutside = (event: MouseEvent) => {
@@ -108,13 +100,9 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ onClose, onSave, onDelete, 
     }, []);
 
     const handleDelete = async () => {
-        console.log("Deleting");
-        if (employeeData && employeeData.id) {
-            try {
-                onDelete(employeeData.id);
-            } catch (error) {
-                console.error("Error deleting employee:", error)
-            }
+        console.log("deleting:", employeeData)
+        if (employeeData && employeeData._id) {
+            onDelete(employeeData._id);
         }
     }
 
@@ -275,10 +263,15 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ onClose, onSave, onDelete, 
 
                 {/* Save Button */}
                 <div className="form-buttons">
-                    {employeeData &&
-                        <button type="button" onClick={handleDelete} className="deleteBtn">Delete Empoyee</button>
-                    }
-                    <button type="submit" className="saveBtn">Save Employee</button>
+                    {employeeData && (
+                        <button type="button" onClick={handleDelete} className="deleteBtn">
+                            Delete Employee
+                        </button>
+                    )}
+                    <button type="submit" className="saveBtn">
+                        <FontAwesomeIcon icon={faCirclePlus} />
+                        Save Employee
+                    </button>
                 </div>
             </form>
         </div>

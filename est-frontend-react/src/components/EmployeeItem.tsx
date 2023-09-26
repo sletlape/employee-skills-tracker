@@ -14,7 +14,7 @@ const EmployeeItem: React.FC<EmployeeItemProps> = ({ employee, index, onEditEmpl
         }
     }
     return (
-        <li className="employee" key={index} onClick={handleClick}>
+        <li className="employee" key={employee._id} onClick={handleClick}>
             <div className="employeeIndex">{index + 1}</div>
             <div className="employeeFirstName">{employee.firstName}</div>
             <div className="employeeLastName">{employee.lastName}</div>

@@ -57,3 +57,25 @@ export async function deleteEmployee(employeeId: string): Promise<Response> {
     }
     return response;
 }
+
+export async function updateEmployee(employeeId: string, updateEmployeeData: Employee): Promise<Employee> {
+    console.log("Updating user:", employeeId)
+    try {
+        const response = await fetch(`${apiURL}/${employeeId}`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(updateEmployeeData)
+        });
+
+        if (!response.ok) {
+            throw new Error("Network error.");
+        }
+        const updatedEmployee = await response.json();
+        return updatedEmployee;
+    } catch (error) {
+        throw new Error(`Error updating employee: ${(error as Error).message}`);
+        
+    }
+}

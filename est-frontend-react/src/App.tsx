@@ -4,19 +4,27 @@ import Header from "./components/Header";
 import EmployeeList from "./components/EmployeeList";
 import EmployeeForm from "./components/EmployeeForm";
 import { Employee } from "./interfaces/Employees";
-import { deleteEmployee, getEmployees,  } from "./services/employeeService";
+import { deleteEmployee, getEmployees, saveEmployee, updateEmployee } from "./services/employeeService";
 import doodle from "./assets/Icon-removebg-preview.png";
 
 function App() {
-  const [employees, setEmpoyees] = useState<Employee[]>([]);
+  const [employees, setEmployees] = useState<Employee[]>([]);
   const [showModal, setShowModal] = useState(false);
   const [editingEmployee, setEditingEmployee] = useState<Employee | undefined>(undefined);
+  const [shouldUpdateEmployees, setShouldUpdateEmployees] = useState(false);
 
   useEffect(() => {
     getEmployees()
-      .then(data => setEmpoyees(data))
+      .then((data) => {
+        setEmployees(data);
+        if (shouldUpdateEmployees) {
+          getEmployees()
+            .then((updatedData) => setEmployees(updatedData))
+            .catch((err) => console.log(err));
+        }
+      })
       .catch((err) => console.log(err));
-  }, [employees]);
+  }, [shouldUpdateEmployees]);
 
   const handleAddEmployeeClick = () => {
     setShowModal(true);
@@ -29,8 +37,23 @@ function App() {
   };
 
   const handleSaveEmployee = (employeeData: Employee) => {
-    console.log("Employee data to save in state:", employeeData);
-    setEmpoyees([...employees, employeeData]);
+    if (editingEmployee && editingEmployee._id) {
+      updateEmployee(editingEmployee._id, employeeData)
+        .then((updatedEmployee) => {
+          console.log("Updating:", updatedEmployee)
+          setShouldUpdateEmployees(true);
+        })
+        .catch((error) => console.error("Error updating employee:", error));
+    } else {
+      saveEmployee(employeeData)
+        .then((newEmployee) => {
+          console.log("Adding employee:", newEmployee)
+          setEditingEmployee(undefined);
+          setShouldUpdateEmployees(true);
+        })
+        .catch((error) => console.error("Error adding employee:", error));
+    }
+
     setShowModal(false);
   };
 
@@ -39,7 +62,8 @@ function App() {
     try {
       const response = await deleteEmployee(employeeID);
       if (response.status === 200) {
-        setEmpoyees(employees.filter(employee => employee.id !== employeeID));
+        // Trigger an update of employee data
+        setShouldUpdateEmployees(true);
       }
     } catch (error) {
       console.error(`Error deleting employee and/or updating employee state: ${(error as Error).message}`);
@@ -47,32 +71,27 @@ function App() {
     setShowModal(false);
   }
 
-  const hanldeUpdateEmployee = (employeeID: string) => {
-    console.log("Updating employee", employeeID)
-  }
-
   return (
     <div className="App">
       <div className="container">
         <Header onAddEmployeeClick={handleAddEmployeeClick} employeeCount={employees.length} />
-        { employees.length > 0 ?
-          <EmployeeList employees={employees} onEditEmployeeClick={handleEditEmployeeClick} /> :
+        {employees.length > 0 ? (
+          <EmployeeList employees={employees} onEditEmployeeClick={handleEditEmployeeClick} />
+        ) : (
           <div className="no-employees">
-            <img src={doodle}></img>
+            <img src={doodle} alt="No employees" />
             <h4>There is nothing here</h4>
             <h5>Create a new employee by clicking</h5>
             <h5><strong>New Employee</strong> button to get started</h5>
           </div>
-        }
-        {
-          showModal && (
+        )}
+        {showModal && (
           <EmployeeForm
-              onClose={() => setShowModal(false)}
-              onSave={handleSaveEmployee}
-              onDelete={handleDeleteEmployee}
-              employeeData={editingEmployee}
-              updateEmployee={hanldeUpdateEmployee}
-            />
+            onClose={() => setShowModal(false)}
+            onSave={handleSaveEmployee}
+            onDelete={handleDeleteEmployee}
+            employeeData={editingEmployee}
+          />
         )}
       </div>
     </div>

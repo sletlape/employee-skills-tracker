@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState } from "react";
 interface SearchBarProps {
     onSearch: (searchText: string) => void;
 }
@@ -13,13 +13,13 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
     };
 
     return (
-            <input
-                className="searchbar"
-                type="text"
-                placeholder="Search..."
-                value={searchText}
-                onChange={handleSearchChange}
-            />
+        <input
+            className="searchbar"
+            type="text"
+            placeholder="Search..."
+            value={searchText}
+            onChange={handleSearchChange}
+        />
     );
 };
 

@@ -1,15 +1,14 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleDown, faCirclePlus } from "@fortawesome/free-solid-svg-icons"
 import SearchBar from './SearchBar';
 
 interface HeaderProps {
-    employeeCount: number,
+    employeeCount: number;
     onAddEmployeeClick: () => void;
 }
 
 const Header: React.FC<HeaderProps> = ({ employeeCount, onAddEmployeeClick }) => {
-    // const [selectedFilter, setSelectedFilter] = useState<string>('All');
     return (
         <div className="header">
             <div className="title">
@@ -20,10 +19,12 @@ const Header: React.FC<HeaderProps> = ({ employeeCount, onAddEmployeeClick }) =>
             {
                 employeeCount > 0 &&
                     <>
-                        <SearchBar />
+                        <SearchBar onSearch={function (searchText: string): void {
+                            console.log(searchText);
+                        } }  />
                         <div className="filter">
-                            Filter by { }
-                            <FontAwesomeIcon icon={faAngleDown} style={{ color: "#7b549c", }} />
+                                    <span>Filter by </span> { }
+                                    <FontAwesomeIcon icon={faAngleDown} style={{ color: "#7b549c", }} />
                         </div>
                     </> 
                 }
