@@ -2,32 +2,55 @@ import { Request, Response } from "express";
 import { validationResult } from "express-validator";
 import EmployeeModel, { EmployeeDocument } from "../models/Employee";
 import { generateEmployeeID } from "../utils/generateID";
+import { FilterQuery } from "mongoose";
+
+const searchEmployees = async (searchQuery: string) => {
+    return {
+        $or: [
+            { firstName: { $regex: new RegExp(searchQuery.toString(), "i") } },
+            { lastName: { $regex: new RegExp(searchQuery.toString(), "i") } },
+            { "skills.skill": { $regex: new RegExp(searchQuery.toString(), "i") } }
+        ]
+    }
+}
+
+const filterEmployees = async (skill: string, seniority: string, city: string): Promise<FilterQuery<EmployeeDocument>> => {
+    const filterQuery: FilterQuery<EmployeeDocument> = {};
+
+    if (skill) {
+        filterQuery["skills.skill"] = { $regex: new RegExp(skill, "i") };
+    }
+    if (seniority) {
+        filterQuery["skills.seniority"] = { $regex: new RegExp(seniority, "i") };
+    }
+    if (city) {
+        filterQuery["city"] = { $regex: new RegExp(city, "i") };
+    }
+
+    return filterQuery;
+};
 
 export const getEmployees = async (req: Request, res: Response) => {
     try {
         console.log("Search or filter:", req.query)
         const { search, skill, seniority, city } = req.query;
-        const queryBy: any = {}
+        let queryBy: any = {}
+
         if (search) {
-            queryBy.$or = [
-                { firstName: { $regex: new RegExp(search.toString(), "i") } },
-                { lastName: { $regex: new RegExp(search.toString(), "i") } },
-                { "skills.skill": { $regex: new RegExp(search.toString(), "i") } },
-            ];
+            queryBy = await searchEmployees(search.toString());
         }
 
-        if (skill) {
-            queryBy["skills.skill"] = { $regex: new RegExp(skill.toString(), "i") };
-        }
-        if (seniority) {
-            queryBy["skills.seniority"] = { $regex: new RegExp(seniority.toString(), "i") };
-        }
-        if (city) {
-            queryBy["city"] = { $regex: new RegExp(city.toString(), "i") };
+        if (skill !== undefined || seniority !== undefined || city !== undefined) {
+            const filterBy = await filterEmployees(
+                skill?.toString() || "",
+                seniority?.toString() || "",
+                city?.toString() || ""
+            );
+            queryBy = { ...queryBy, ...filterBy }
         }
 
         const employees = await EmployeeModel.find(queryBy);
-        console.log("Responding data:",employees)
+        console.log("Responding data:", employees)
         res.status(200).json(employees);
     } catch (error) {
         console.error("Error getting employees:", error);
