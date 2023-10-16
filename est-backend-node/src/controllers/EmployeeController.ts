@@ -9,7 +9,7 @@ const searchEmployees = async (searchQuery: string) => {
         $or: [
             { firstName: { $regex: new RegExp(searchQuery.toString(), "i") } },
             { lastName: { $regex: new RegExp(searchQuery.toString(), "i") } },
-            { "skills.skill": { $regex: new RegExp(searchQuery.toString(), "i") } }
+            { emailAddress: { $regex: new RegExp(searchQuery.toString(), "i") } }
         ]
     }
 }
@@ -32,7 +32,7 @@ const filterEmployees = async (skill: string, seniority: string, city: string): 
 
 export const getEmployees = async (req: Request, res: Response) => {
     try {
-        console.log("Search or filter:", req.query)
+        // console.log("Search or filter:", req.query)
         const { search, skill, seniority, city } = req.query;
         let queryBy: any = {}
 
@@ -50,7 +50,7 @@ export const getEmployees = async (req: Request, res: Response) => {
         }
 
         const employees = await EmployeeModel.find(queryBy);
-        console.log("Responding data:", employees)
+        // console.log("Responding data:", employees)
         res.status(200).json(employees);
     } catch (error) {
         console.error("Error getting employees:", error);
@@ -79,11 +79,11 @@ export const createEmployee = async (req: Request, res: Response) => {
 
 export const deleteEmployee = async (req: Request, res: Response) => {
     try {
-        console.log("Deleting:", req.params)
+        // console.log("Deleting:", req.params)
         const { id } = req.params;
 
         const employee = await EmployeeModel.findOne({ _id: id });
-        console.log("!!!", employee)
+        // console.log("!!!", employee)
         if (!employee) {
             return res.status(404).json({ message: "Employee not found" });
         }
