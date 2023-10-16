@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-import { Employee, Skill } from '../interfaces/Employees';
+import { Address, Employee, Skill } from '../interfaces/Employees';
 // import { saveEmployee, updateEmployee } from "../services/employeeService";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCirclePlus } from "@fortawesome/free-solid-svg-icons";
@@ -11,8 +11,16 @@ interface EmployeeFormProps {
     employeeData?: Employee;
 }
 
+
+
 const EmployeeForm: React.FC<EmployeeFormProps> = ({ onClose, onSave, onDelete, employeeData }) => {
     const initialSkill: Skill = { skill: "", yearsExperience: "", seniority: "" };
+    const initialAddress: Address = {
+        streetAddress: "",
+        city: "",
+        postalCode: "",
+        country: ""
+    }
     const formRef = useRef<HTMLDivElement>(null);
 
     const [formData, setFormData] = useState<Employee>({
@@ -21,10 +29,7 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ onClose, onSave, onDelete, 
         contactNumber: "",
         emailAddress: "",
         dob: "",
-        streetAddress: "",
-        city: "",
-        postalCode: "",
-        country: "",
+        address: initialAddress,
         skills: [initialSkill],
     });
 
@@ -38,10 +43,7 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ onClose, onSave, onDelete, 
                 contactNumber: "",
                 emailAddress: "",
                 dob: "",
-                streetAddress: "",
-                city: "",
-                postalCode: "",
-                country: "",
+                address: initialAddress,
                 skills: [initialSkill],
             });
         }
@@ -49,10 +51,24 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ onClose, onSave, onDelete, 
 
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = event.target;
-        setFormData({
-            ...formData,
-            [name]: value,
-        });
+        
+        if (name.includes("address")) {
+            const fieldName = name.replace("address.", "");
+            console.log("Updating address:", fieldName +"="+value)
+            setFormData({
+                ...formData,
+                address: {
+                    ...formData.address,
+                    [fieldName]: value
+                }
+            });
+        } else {
+            console.log("Updating form:", name + "=" + value)
+            setFormData({
+                ...formData,
+                [name]: value
+            });
+        }
     };
 
     const handleAddSkill = () => {
@@ -171,8 +187,8 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ onClose, onSave, onDelete, 
                     Street Address:
                     <input
                         type="text"
-                        name="streetAddress"
-                        value={formData.streetAddress}
+                        name="address.streetAddress"
+                        value={formData.address.streetAddress}
                         onChange={handleInputChange}
                         required
                     />
@@ -182,7 +198,7 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ onClose, onSave, onDelete, 
                     <input
                         type="text"
                         name="city"
-                        value={formData.city}
+                        value={formData.address.city}
                         onChange={handleInputChange}
                         required
                     />
@@ -191,8 +207,8 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ onClose, onSave, onDelete, 
                     Postal Code:
                     <input
                         type="text"
-                        name="postalCode"
-                        value={formData.postalCode}
+                        name="address.postalCode"
+                        value={formData.address.postalCode}
                         onChange={handleInputChange}
                         required
                     />
@@ -201,8 +217,8 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ onClose, onSave, onDelete, 
                     Country:
                     <input
                         type="text"
-                        name="country"
-                        value={formData.country}
+                        name="address.country"
+                        value={formData.address.country}
                         onChange={handleInputChange}
                         required
                     />

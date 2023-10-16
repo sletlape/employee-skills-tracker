@@ -5,14 +5,15 @@ import { Employee } from "../interfaces/Employees";
 // const resourcePath = "employees";
 // const apiURL: string = `${baseURL}/${apiVersion}/${resourcePath}`;
 
-let apiURL: string = `http://localhost:3000/api/v1/employees`;
+const apiURL: string = `http://localhost:3000/api/v1/employees`;
 
-export async function getEmployees(query? : string): Promise<Employee[]> {
+export async function getEmployees(query?: string): Promise<Employee[]> {
     try {
-        if (query)
-            apiURL = apiURL + '/?' + query;
-        console.log('I want:', apiURL)
-        const response = await fetch(`${apiURL}`);
+        let url: string = apiURL;
+        if (query) {
+            url = url + '/?' + query;
+        }
+        const response = await fetch(`${url}`);
         if (!response.ok) {
             throw new Error("Network error.")
         }
@@ -24,7 +25,7 @@ export async function getEmployees(query? : string): Promise<Employee[]> {
 }
 
 export async function saveEmployee(employeeData: Employee): Promise<Employee[]> {
-    console.log("Sending POST request")
+    // console.log("Sending POST request")
     try {
         const response = await fetch(apiURL, {
             method: "POST",
@@ -37,9 +38,9 @@ export async function saveEmployee(employeeData: Employee): Promise<Employee[]> 
             throw new Error("Network error.");
 
         const savedEmpoyee = await response.json();
-        console.log(savedEmpoyee)
+        // console.log(savedEmpoyee)
         return savedEmpoyee;
-        
+
     } catch (error) {
         throw new Error(`Error retrieving employees: ${(error as Error).message}`);
     }
@@ -48,7 +49,7 @@ export async function saveEmployee(employeeData: Employee): Promise<Employee[]> 
 export async function deleteEmployee(employeeId: string): Promise<Response> {
     let response;
     try {
-        console.log("Deleting employee with id:", employeeId)
+        // console.log("Deleting employee with id:", employeeId)
         response = await fetch(`${apiURL}/${employeeId}`, {
             method: "DELETE"
         });
@@ -62,7 +63,7 @@ export async function deleteEmployee(employeeId: string): Promise<Response> {
 }
 
 export async function updateEmployee(employeeId: string, updateEmployeeData: Employee): Promise<Employee> {
-    console.log("Updating user:", employeeId)
+    // console.log("Updating user:", employeeId)
     try {
         const response = await fetch(`${apiURL}/${employeeId}`, {
             method: "PUT",
@@ -79,6 +80,6 @@ export async function updateEmployee(employeeId: string, updateEmployeeData: Emp
         return updatedEmployee;
     } catch (error) {
         throw new Error(`Error updating employee: ${(error as Error).message}`);
-        
+
     }
 }

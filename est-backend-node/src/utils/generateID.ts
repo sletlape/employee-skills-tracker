@@ -23,7 +23,6 @@ export const generateEmployeeID = async (): Promise<string> => {
         employeeID = letters + numbers;
 
         isUniqe = await checkUnique(employeeID);
-        console.log(employeeID,": is it unique?", isUniqe);
     }
 
     return employeeID;

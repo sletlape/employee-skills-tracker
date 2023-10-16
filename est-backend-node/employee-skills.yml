@@ -1,0 +1,153 @@
+openapi: 3.0.0
+info:
+  title: Employee Skills API
+  description: An API for managing employee information and skills.
+  version: 1.0.0
+servers:
+  - url: http://localhost:3000
+    description: Development Server.
+paths:
+  /api/v1/employees:
+    get:
+      summary: Get a list of employees
+      responses:
+        '200':
+          description: A list of employees
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Employee'
+      
+    post:
+      summary: Create a new employee
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Employee'
+      responses:
+        '201':
+          description: Employee created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Employee'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              example: { message: 'Invalid input' }
+  
+  /api/v1/employees/{id}:
+    get:
+      summary: Get an employee by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Employee found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Employee'
+        '404':
+          description: Employee not found
+
+    put:
+      summary: Update an employee by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Employee'
+      responses:
+        '200':
+          description: Employee updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Employee'
+        '404':
+          description: Employee not found
+
+    delete:
+      summary: Delete an employee by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Employee deleted
+        '404':
+          description: Employee not found
+
+components:
+  schemas:
+    Employee:
+      type: object
+      properties:
+        _id:
+          type: string
+          example: "123456789"
+        firstName:
+          type: string
+          example: "John"
+        lastName:
+          type: string
+          example: "Doe"
+        contactNumber:
+          type: string
+          example: "+1234567890"
+        emailAddress:
+          type: string
+          example: "john.doe@example.com"
+        dob:
+          type: string
+          example: "1990-01-01"
+        address:
+          type: object
+          properties:
+            streetAddress:
+              type: string
+              example: "123 Main St"
+            city:
+              type: string
+              example: "Cityville"
+            postalCode:
+              type: string
+              example: "12345"
+            country:
+              type: string
+              example: "Countryland"
+        skills:
+          type: array
+          items:
+            type: object
+            properties:
+              skill:
+                type: string
+                example: "Java"
+              yearsExperience:
+                type: string
+                example: "5+"
+              seniority:
+                type: string
+                example: "Senior"
+

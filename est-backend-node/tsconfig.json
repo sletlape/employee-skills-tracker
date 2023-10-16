@@ -13,12 +13,13 @@
   },
   "include": [
     "src/**/*.ts",
-    "test/**/*.ts"
+    "test/**/*.ts",
+    "test/emp"
   ],
   "exclude": [
     "node_modules"
   ],
   "files": [
-    "src/server.ts"
+    "src/server.ts",
   ]
 }
