@@ -8,10 +8,12 @@ describe('EmployeeItem Component', () => {
         contactNumber: "123-456-7890",
         emailAddress: "john.doe@example.com",
         dob: "1990-01-01",
-        streetAddress: "123 Main St",
-        city: "Cityville",
-        postalCode: "12345",
-        country: "USA",
+        address: {
+            streetAddress: "123 Main St",
+            city: "Cityville",
+            postalCode: "12345",
+            country: "USA"
+        },
         skills: [
             {
                 skill: "JavaScript",
@@ -35,7 +37,7 @@ describe('EmployeeItem Component', () => {
     });
 
     it('should call onEditEmployeeClick when clicked', () => {
-        const onEditEmployeeClick = jest.fn();
+        const onEditEmployeeClick = vi.fn();
         render(<EmployeeItem employee={mockEmployee} index={0} onEditEmployeeClick={onEditEmployeeClick} />);
         const listItem = screen.getByText('John'); // Click anywhere on the item
         listItem.click();

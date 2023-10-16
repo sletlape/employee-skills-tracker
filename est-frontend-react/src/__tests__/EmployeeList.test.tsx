@@ -3,6 +3,8 @@ import EmployeeList from '../components/EmployeeList';
 import { Employee } from '../interfaces/Employees';
 
 describe('Testing EmployeeList Component with employees', () => {
+
+    console.log("\nEmployeeList test\n");
     const mockEmployees: Employee[] = [
         {
             firstName: "John",
@@ -10,10 +12,13 @@ describe('Testing EmployeeList Component with employees', () => {
             contactNumber: "123-456-7890",
             emailAddress: "john.doe@example.com",
             dob: "1990-01-01",
-            streetAddress: "123 Main St",
-            city: "Cityville",
-            postalCode: "12345",
-            country: "USA",
+            address:
+            {
+                streetAddress: "123 Main St",
+                city: "Cityville",
+                postalCode: "12345",
+                country: "USA",
+            },
             skills: [
                 {
                     skill: "JavaScript",
@@ -33,10 +38,12 @@ describe('Testing EmployeeList Component with employees', () => {
             contactNumber: "987-654-3210",
             emailAddress: "jane.smith@example.com",
             dob: "1995-02-15",
-            streetAddress: "456 Oak St",
-            city: "Townsville",
-            postalCode: "54321",
-            country: "Canada",
+            address: {
+                streetAddress: "456 Oak St",
+                city: "Townsville",
+                postalCode: "54321",
+                country: "Canada"
+            },
             skills: [
                 {
                     skill: "Python",
@@ -52,7 +59,7 @@ describe('Testing EmployeeList Component with employees', () => {
         },
     ];
 
-    const mockEditEmployeeClick = jest.fn();
+    const mockEditEmployeeClick = vi.fn();
 
     beforeEach(() => {
         render(<EmployeeList employees={mockEmployees} onEditEmployeeClick={mockEditEmployeeClick} />);
