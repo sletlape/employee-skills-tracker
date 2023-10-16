@@ -6,6 +6,13 @@ export interface Skill {
     seniority: string;
 }
 
+export interface Address {
+    streetAddress: string;
+    city: string;
+    postalCode: string;
+    country: string;
+}
+
 export interface EmployeeDocument extends Document {
     _id: string;
     firstName: string;
@@ -13,10 +20,7 @@ export interface EmployeeDocument extends Document {
     contactNumber: string;
     emailAddress: string;
     dob: string;
-    streetAddress: string;
-    city: string;
-    postalCode: string;
-    country: string;
+    address: string;
     skills: Skill[];
 }
 
@@ -27,10 +31,12 @@ const EmployeeSchema = new Schema<EmployeeDocument>({
     contactNumber: { type: String, required: true },
     emailAddress: { type: String, required: true },
     dob: { type: String, required: true },
-    streetAddress: { type: String, required: true },
-    city: { type: String, required: true },
-    postalCode: { type: String, required: true },
-    country: { type: String, required: true },
+    address: {
+        streetAddress: {type: String, required: true},
+        city: {type: String, required: true},
+        postalCode: {type: String, required: true},
+        country: {type: String, required: true},
+    },
     skills: [
         {
             skill: { type: String, required: true },
