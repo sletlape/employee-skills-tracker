@@ -3,10 +3,15 @@ import Header from '../components/Header';
 
 describe('Testing the Header component with employees', () => {
     const mockEmployeeCount = 3;
-    const mockAddEmployeeClick = jest.fn();
+    const mockFunc = vi.fn();
 
+    console.log("Header tests")
     beforeEach(() => {
-        render(<Header employeeCount={mockEmployeeCount} onAddEmployeeClick={mockAddEmployeeClick} />);
+        render(<Header
+            employeeCount={mockEmployeeCount}
+            onAddEmployeeClick={mockFunc}
+            onSearch={mockFunc}
+            onFilterChange={mockFunc} />);
     });
 
     it('should display the title', () => {

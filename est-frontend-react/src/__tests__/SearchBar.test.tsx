@@ -2,7 +2,7 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import SearchBar from '../components/SearchBar';
 
 describe('Testing the SearchBar component', () => {
-    const mockOnSearch = jest.fn();
+    const mockOnSearch = vi.fn();
 
     beforeEach(() => {
         render(<SearchBar onSearch={mockOnSearch} />);
