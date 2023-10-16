@@ -5,13 +5,14 @@ import React, { ChangeEvent, useState } from "react";
 interface FilterDropdownProps {
     onFilterChange: (filters: { skill: string; seniority: string; city: string }) => void;
 }
+const initFilters = {
+    skill: "",
+    seniority: "",
+    city: "",
+}
 
 const FilterDropdown: React.FC<FilterDropdownProps> = ({ onFilterChange }) => {
-    const [filters, setFilters] = useState({
-        skill: "",
-        seniority: "",
-        city: "",
-    });
+    const [filters, setFilters] = useState(initFilters);
 
     const [isOpen, setIsOpen] = useState(false);
 
@@ -20,10 +21,19 @@ const FilterDropdown: React.FC<FilterDropdownProps> = ({ onFilterChange }) => {
         setFilters((prevFilters) => ({ ...prevFilters, [name]: value }));
     };
 
+    const handleFilterChangeAndToggle = (filters: { skill: string; seniority: string; city: string }) => {
+        onFilterChange(filters);
+        setIsOpen(!isOpen);
+    };
+
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
-        onFilterChange(filters);
-        setIsOpen(!isOpen)
+        handleFilterChangeAndToggle(filters);
+    };
+
+    const handleResetFilters = () => {
+        setFilters(initFilters);
+        handleFilterChangeAndToggle(initFilters);
     };
 
     return (
@@ -66,6 +76,7 @@ const FilterDropdown: React.FC<FilterDropdownProps> = ({ onFilterChange }) => {
                             />
                         </div>
                         <button type="submit">Apply Filters</button>
+                        <button type="button" onClick={handleResetFilters}>Reset Filters</button>
                     </form>
                 </div>
             )}
